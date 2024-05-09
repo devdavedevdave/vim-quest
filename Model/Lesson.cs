@@ -2,9 +2,9 @@
 
 public class Lesson
 {
-	public Lesson(string desc)
+	public Lesson(string description)
 	{
-		Description = desc;
+		Description = description;
 	}
 
 	private string Description { get; set; }

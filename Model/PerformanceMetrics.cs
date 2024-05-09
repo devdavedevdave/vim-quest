@@ -4,103 +4,52 @@ public class PerformanceMetrics
 {
     private int Attempts;
 
-    private int TimeTaken;
-
     private int ErrorsMade;
+    
+    private int TimeTaken;
 
     private int TimeToFirstKey;
 
+    public PerformanceMetrics(int attempts, int timeTaken, int errorsMade, int timeToFirstKey)
+    {
+        Attempts = attempts;
+        ErrorsMade = errorsMade;
+        TimeTaken = timeTaken;
+        TimeToFirstKey = timeToFirstKey;
+    }
+    
     public int CalculateOverallPerformanceScore()
     {
-        // Calculate performance score of each single one.
-            // This needs to be enough flexible, for me to be able to add new criterias
-            // Also I want to have a base set of criterias, which validate the score, but be able to change this based on the exercise
-        // Return sum of PerformanceScore
-        return 0;
-    }
-
-    private int CalculateAttemptsScore(int penalty)
-    {
-        int score = 25;
-        
-        if (Attempts > 1)
+        var attributes = new List<(int attribute, int penalty, int index, int indexIncrease, int upperLimit)>
         {
-            for (int i = 1; i < Attempts; i++)
+            (Attempts, 10, 1, 1, 4),
+            (ErrorsMade, 3, 0, 1, 7),
+            (TimeTaken, 5, 1, 1, 600),
+            (TimeToFirstKey, 5, 50, 50, 300),
+        };
+        
+        int scorePoints = 100 / attributes.Count;
+
+        return attributes.Select(el => CalculatePerformanceScore(el.attribute, scorePoints, el.penalty, el.index, el.indexIncrease, el.upperLimit)).Sum();
+    }
+    
+    private static int CalculatePerformanceScore(int attribute, int scorePoints, int penalty, int index, int indexIncrease, int upperLimit)
+    {
+        for (; index < attribute || index < upperLimit; index += indexIncrease)
+        {
+            if (scorePoints - penalty < 0)
             {
-                if (score - penalty < 0)
-                {
-                    score = 0;
-                    break;
-                }
-                score -= penalty;
+                scorePoints = 0;
+                break;
             }
+
+            scorePoints -= penalty;
         }
 
-        return score;
+        return scorePoints;
     }
-
-    private int CalculateTimeTakenScore()
-    {
-        int score = 25;
-
-        switch (TimeTaken)
-        {
-            case <= 1000:
-                break;
-            case <= 1250:
-                score -= 5;
-                break;
-            case <= 1500:
-                score -= 10;
-                break;
-            case <= 1750:
-                score -= 15;
-                break;
-            case <= 2000:
-                score -= 20;
-                break;
-            default:
-                score = 0;
-                break;
-        }
-
-        return score;
-    }
-    
-    private int CalculateErrorsMadeScore()
-    {
-        int score = 25;
-        
-        switch (ErrorsMade)
-        {
-            case == 0:
-                break;
-            case == 1:
-                score -= 5;
-                break;
-            case == 2:
-                score -= 10;
-                break;
-            case == 3:
-                score -= 15;
-                break;
-            case == 4:
-                score -= 20;
-                break;
-            default:
-                score = 0;
-                break;
-        }
-
-        return score;
-    }
-    
-    private int CalculateTimeToFirstKeyScore()
-    {
-        
-    }
-    
 }
+
 
 
 // Attemps: 5 (int)
