@@ -1,66 +1,51 @@
 namespace vim_quest.Model;
 
-public class PerformanceMetrics
+public class Metric
 {
-    private int Attempts;
+    public int Value { get; set; }
+    public int ScorePoints { get; set; }
+    public int Penalty { get; set; }
+    public int Threshold { get; set; }
+    public int ThresholdIncrement { get; set; }
 
-    private int ErrorsMade;
-    
-    private int TimeTaken;
-
-    private int TimeToFirstKey;
-
-    public PerformanceMetrics(int attempts, int timeTaken, int errorsMade, int timeToFirstKey)
+    public Metric(int value, int scorePoints, int penalty, int threshold, int thresholdIncrement)
     {
-        Attempts = attempts;
-        ErrorsMade = errorsMade;
-        TimeTaken = timeTaken;
-        TimeToFirstKey = timeToFirstKey;
+        Value = value;
+        ScorePoints = scorePoints;
+        Penalty = penalty;
+        Threshold = threshold;
+        ThresholdIncrement = thresholdIncrement;
     }
-    
-    public int CalculateOverallPerformanceScore()
-    {
-        var attributes = new List<(int attribute, int penalty, int index, int indexIncrease, int upperLimit)>
-        {
-            (Attempts, 10, 1, 1, 4),
-            (ErrorsMade, 3, 0, 1, 7),
-            (TimeTaken, 5, 1, 1, 600),
-            (TimeToFirstKey, 5, 50, 50, 300),
-        };
-        
-        int scorePoints = 100 / attributes.Count;
 
-        return attributes.Select(el => CalculatePerformanceScore(el.attribute, scorePoints, el.penalty, el.index, el.indexIncrease, el.upperLimit)).Sum();
-    }
-    
-    private static int CalculatePerformanceScore(int attribute, int scorePoints, int penalty, int index, int indexIncrease, int upperLimit)
+    public int CalculateScore()
     {
-        for (; index < attribute || index < upperLimit; index += indexIncrease)
+        int calculatedScore = ScorePoints;
+        for (int currentThreshold = Threshold; currentThreshold < Value; currentThreshold += ThresholdIncrement)
         {
-            if (scorePoints - penalty < 0)
-            {
-                scorePoints = 0;
-                break;
-            }
-
-            scorePoints -= penalty;
+            calculatedScore = Math.Max(0, calculatedScore - Penalty);
         }
-
-        return scorePoints;
+        return calculatedScore;
     }
 }
 
+public class PerformanceMetrics
+{
+    private Metric Attempts;
+    private Metric ErrorsMade;
+    private Metric TimeTaken;
+    private Metric TimeToFirstKey;
 
+    public PerformanceMetrics(int attempts, int errorsMade, int timeTaken, int timeToFirstKey)
+    {
+        Attempts = new Metric(attempts, 15, 10, 1, 1);
+        ErrorsMade = new Metric(errorsMade, 25, 5, 0, 1);
+        TimeTaken = new Metric(timeTaken, 35, 5, 100, 100);
+        TimeToFirstKey = new Metric(timeToFirstKey, 25, 5, 50, 50);
+    }
 
-// Attemps: 5 (int)
-// TimeTaken: 256 (ms)
-// ErrorsMade: 5 (int)
-// TimeToFirstKey: 50ms
-
-// PerformanceScore: 100 
-// PerformanceScore: 100 
-// PerformanceScore: 100
-
-// each criteria gives 25
-// when not meeting a certain ideal, they get minus points.
-
+    public int CalculateOverallPerformanceScore()
+    {
+        return Attempts.CalculateScore() + ErrorsMade.CalculateScore() + 
+               TimeTaken.CalculateScore() + TimeToFirstKey.CalculateScore();
+    }
+}
