@@ -1,51 +1,28 @@
 namespace vim_quest.Model;
 
-public class Metric
+public class Metric(int value, int scorePoints, int penalty, int threshold, int thresholdIncrement)
 {
-    public int Value { get; set; }
-    public int ScorePoints { get; set; }
-    public int Penalty { get; set; }
-    public int Threshold { get; set; }
-    public int ThresholdIncrement { get; set; }
-
-    public Metric(int value, int scorePoints, int penalty, int threshold, int thresholdIncrement)
-    {
-        Value = value;
-        ScorePoints = scorePoints;
-        Penalty = penalty;
-        Threshold = threshold;
-        ThresholdIncrement = thresholdIncrement;
-    }
-
     public int CalculateScore()
     {
-        int calculatedScore = ScorePoints;
-        for (int currentThreshold = Threshold; currentThreshold < Value; currentThreshold += ThresholdIncrement)
+        int calculatedScore = scorePoints;
+        for (int currentThreshold = threshold; currentThreshold < value; currentThreshold += thresholdIncrement)
         {
-            calculatedScore = Math.Max(0, calculatedScore - Penalty);
+            calculatedScore = Math.Max(0, calculatedScore - penalty);
         }
         return calculatedScore;
     }
 }
 
-public class PerformanceMetrics
+public class PerformanceMetrics(int attempts, int errorsMade, int timeTaken, int timeToFirstKey)
 {
-    private Metric Attempts;
-    private Metric ErrorsMade;
-    private Metric TimeTaken;
-    private Metric TimeToFirstKey;
+    private readonly Metric _attempts = new(attempts, 15, 10, 1, 1);
+    private readonly Metric _errorsMade = new(errorsMade, 25, 5, 0, 1);
+    private readonly Metric _timeTaken = new(timeTaken, 35, 5, 100, 100);
+    private readonly Metric _timeToFirstKey = new(timeToFirstKey, 25, 5, 50, 50);
 
-    public PerformanceMetrics(int attempts, int errorsMade, int timeTaken, int timeToFirstKey)
+    public double CalculateOverallPerformanceScore()
     {
-        Attempts = new Metric(attempts, 15, 10, 1, 1);
-        ErrorsMade = new Metric(errorsMade, 25, 5, 0, 1);
-        TimeTaken = new Metric(timeTaken, 35, 5, 100, 100);
-        TimeToFirstKey = new Metric(timeToFirstKey, 25, 5, 50, 50);
-    }
-
-    public int CalculateOverallPerformanceScore()
-    {
-        return Attempts.CalculateScore() + ErrorsMade.CalculateScore() + 
-               TimeTaken.CalculateScore() + TimeToFirstKey.CalculateScore();
+        return (_attempts.CalculateScore() + _errorsMade.CalculateScore() + 
+               _timeTaken.CalculateScore() + _timeToFirstKey.CalculateScore()) / 100.0;
     }
 }

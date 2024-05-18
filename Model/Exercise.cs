@@ -2,14 +2,25 @@ namespace vim_quest.Model;
 
 public class Exercise
 {
-    private string Code;
+    public string Code { get; set; }
 
-    private string Description;
+    public string Description { get; set; }
+    public int Points { get; set; }
 
-    private string Points;
+    public string Difficulty { get; set; }
 
-    private string Difficulty;
+    public List<Session> Sessions { get; set; } 
+    
+    public List<Command> Commands { get; set; }
 
-    private List<Command> Commands;
-
+    public Exercise(string code, string description, int points, string difficulty, List<Session> sessions, List<Command> commands)
+    {
+        Code = code;
+        Description = description;
+        Points = points;
+        Difficulty = difficulty;
+        Sessions = sessions;
+        Commands = commands;
+    } 
+    
 }
