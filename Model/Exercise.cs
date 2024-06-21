@@ -12,7 +12,7 @@ public class Exercise
     public List<Session> Sessions { get; set; } 
     
     public List<Command> Commands { get; set; }
-
+    
     public Exercise(string code, string description, int points, string difficulty, List<Session> sessions, List<Command> commands)
     {
         Code = code;
@@ -21,6 +21,5 @@ public class Exercise
         Difficulty = difficulty;
         Sessions = sessions;
         Commands = commands;
-    } 
-    
+    }
 }

@@ -2,9 +2,7 @@ namespace vim_quest.Model;
 
 public class Progress
 {   
-    private List<Exercise> CompletedExercises = new();
-
-    private List<Command> AreasForImprovement = new();
+    private List<Exercise> _completedExercises = new();
 
     private int Level { get; set; } = 0;
 
@@ -12,7 +10,7 @@ public class Progress
 
     public void AddCompletedExercise(Exercise exercise)
     {
-        CompletedExercises.Add(exercise);
+        _completedExercises.Add(exercise);
     }
     
     private double CalculatePointsForExercise(Exercise exercise)
@@ -27,7 +25,7 @@ public class Progress
 
     private double CalculateOverallPoints()
     {
-        var completedExercises = CompletedExercises;
+        var completedExercises = _completedExercises;
         return completedExercises.Select(CalculatePointsForExercise).Sum();
     }
     
@@ -39,18 +37,5 @@ public class Progress
         if (points < 1500) return 3; // Purple Belt
         if (points < 3000) return 4; // Brown Belt
         return 5; // Black Belt
-    }
-
-    public void EvaluateAreasForImprovement()
-    {
-        // Retrieve all exercises
-        var completedExercises = CompletedExercises;
-        
-        // Get newest session of each exercise
-        
-        // Evaluate Performance Score of that session
-        
-        // If score < 90 -> Add to AreasForImprovement list, others do not.
-
     }
 }

@@ -2,12 +2,11 @@
 
 public class Lesson
 {
+	private string Description { get; set; }
 	public Lesson(string description)
 	{
 		Description = description;
 	}
-
-	private string Description { get; set; }
 }
 
 
