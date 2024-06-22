@@ -15,6 +15,8 @@ public class Command
 
 	bool IsKnown { get; set; }
 
+	private int TrainingTimestamp { get; set; }
+
 	private Performance UserPerformance { get; set; }	
 	
 	public Command(string name, Performance performance)

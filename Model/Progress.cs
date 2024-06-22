@@ -32,10 +32,10 @@ public class Progress
     private int CalculateLevelFromPoints(int points)
     {
         // Maybe this needs to be more fine tuned with calculating in the performance score. 
-        if (points < 300) return 1; // White Belt
-        if (points < 900) return 2; // Blue Belt
-        if (points < 1500) return 3; // Purple Belt
-        if (points < 3000) return 4; // Brown Belt
+        if (points < 1000) return 1; // White Belt
+        if (points < 2500) return 2; // Blue Belt
+        if (points < 4000) return 3; // Purple Belt
+        if (points < 7500) return 4; // Brown Belt
         return 5; // Black Belt
     }
 }
